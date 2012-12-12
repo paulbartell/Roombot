@@ -5,8 +5,10 @@ from stormLauncher import launchControl
 import serial
 from EmgInterface import EmgInterface
 import time
-from TestUI import TestUI
+#from TestUI import TestUI
+from RemoteUI import RemoteUI
 from copy import deepcopy
+import socket
 
 ROOMBA_PORT="/dev/tty.usbserial-A2001n69"
 ROOMBA_BAUD="115200"
@@ -22,7 +24,8 @@ roomba = RoombaAPI(ROOMBA_PORT, ROOMBA_BAUD)
 
 #emg = EmgInterface(EMG_PORT, EMG_BAUD);
 #emg = EmgInterface("/dev/tty.M13762-BluetoothSerialP",115200)
-ui = TestUI()
+
+ui = RemoteUI()
 
 #State variable [forward,left,right,vacuum on,vacuum off,m-up,m-down,m-fire]
 
@@ -73,7 +76,7 @@ state = [0,0,0,0,0,0,0,0]
 
 
 while True:
-	ui.getState()
+	ui.refreshState()
 	state = ui.state
 	print oldstate
 	print ui.state
