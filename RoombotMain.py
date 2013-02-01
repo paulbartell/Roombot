@@ -2,13 +2,11 @@
 
 from RoombaSCI import RoombaAPI
 from stormLauncher import launchControl
-import serial
 from EmgInterface import EmgInterface
 import time
 #from TestUI import TestUI
 from RemoteUI import RemoteUI
 from copy import deepcopy
-import socket
 
 ROOMBA_PORT="/dev/tty.usbserial-A2001n69"
 ROOMBA_BAUD="115200"
