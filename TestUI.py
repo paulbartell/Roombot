@@ -40,7 +40,7 @@ class TestUI():
 				except ValueError:
 					pass
 					#Nothing happens here cause we dont care about that key
-		self.s.sendto(bytearray(self.state), ("127.0.0.1", 5000))
+		self.s.sendto(bytearray(self.state), ("128.95.205.202", 5000))
 		return
 
 ui = TestUI()

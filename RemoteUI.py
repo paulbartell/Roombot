@@ -8,7 +8,7 @@ class RemoteUI:
 
 	def __init__(self):
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #start udp socket
-		self.s.bind(("127.0.0.1",5000))
+		self.s.bind(('',5000))
 		self.state = [0,0,0,0,0,0,0,0]
 
 	def refreshState(self):
