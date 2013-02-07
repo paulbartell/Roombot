@@ -14,6 +14,21 @@ print "found %d devices" % len(nearby_devices)
 
 for addr, name in nearby_devices:
     if addr == deviceId:
-	print addr
-	
+		print addr
+
+port = 1
+
+sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+sock.connect((deviceId, port))
+
+
+#Send N command
+sock.send(chr(int('11101110',2)))
+sock.recv(18)
+
+# Sending B command would be ideal
+sock.send(chr(int('01000010',2)))
+sock.recv(24)
+# receive 24 bytes.. loop every 10mS or so... or wait till start
+
 

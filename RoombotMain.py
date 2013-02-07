@@ -29,8 +29,8 @@ ui = RemoteUI()
 
 
 roomba.connect()
-roomba.safe() #set safe control mode
-
+#roomba.safe() #set safe control mode ///Use other mode
+roomba.full()
 
 def processState(state,oldstate):
 	if state[0:3] == [0,0,0]: #roomba stop condition
@@ -68,6 +68,13 @@ def processState(state,oldstate):
 	print "got to the end"
 	return
 # Main loop
+
+def hapticFeedback(self)
+	s = roomba.sensors
+	bumpl = s.bumps.left
+	bumpr = s.bumps.right
+	
+	
 
 oldstate = [0,0,0,0,0,0,0,0]
 state = [0,0,0,0,0,0,0,0]
