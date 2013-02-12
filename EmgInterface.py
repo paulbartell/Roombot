@@ -1,22 +1,19 @@
-import serial
-import Queue
+import bluetooth
 
 class EmgInterface():
-	state = 0
-	## use a queue eventually...
-	def __init__(self,port,baudrate):
-		self.serial = serial.Serial()
-		self.serial.port = port
-		self.serial.baudrate = baudrate
-		self.serial.timeout = 10
-		if(not self.serial.isOpen()):
-			self.serial.open()
+	def __init__(self,deviceID):
+		self.deviceId = address
+		self.port = 1
+		self.sock = None
 
 	def start(self):
-		state = 1
-		self.serial.flushInput()
-		self.serial.write('B')
-
+		while self.sock == None:
+			nearby_devices = bluetooth.discover_devices(lookup_names = True)
+			for addr, name in nearby_devices:
+  		  		if addr == deviceId:
+   		 			self.sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+   		 			sock.connect((self.deviceId, self.port))
+   		 # send start command... how do we do this correctly.. ask them
 
 	def stop(self):
 		state = 0
@@ -26,7 +23,7 @@ class EmgInterface():
 	def close(self):
 		self.serial.close()
 
-	def readPacket(self):
+	def readPacket(self, packet):
 		packet = self.serial.read(24)
 		if(packet.count(0x00) == 4 and s.index(0x00) == 16):
 			out = []

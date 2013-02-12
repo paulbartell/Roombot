@@ -5,6 +5,7 @@
 
 # 2011(c) Modifications and cleaning by Jerome Flesch <jflesch@gmail.com>
 # 2012(c) Small modifications to remove roo-tooth stuff. by Paul Bartell <pbartell@uw.edu>
+# 2013(c) light touch sensor addition
 
 import serial
 import sys
@@ -106,6 +107,32 @@ class DirtDetector(object):
     def __right(self):
         return self.dataList[1]
     right = property(__right)
+	
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+class Promximity(object):
+	def __init__(self,dataList):
+		self.dataList = dataList
+		
+	def __left(self):
+		return TwoBytes(self.__dataList[0:2]).to_int16()
+	left = property(__left)
+	def __frontLeft(self):
+		return TwoBytes(self.__dataList[2:4]).to_int16()
+	front_left = property(__front_left)
+	def __center_left(self):
+		return TwoBytes(self.__dataList[4:6]).to_int16()
+	center_left = property(__center_left)
+	def __center_right(self):
+		return TwoBytes(self.__dataList[6:8]).to_int16()
+	center_right = property(__center_right)
+	def __front_right(self):
+		return TwoBytes(self.__dataList[8:10]).to_int16()
+	front_right = property(__front_right)
+	def __right(self):
+		return TwoBytes(self.__dataList[10:12]).to_int16()
+	right = property(__right)	
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 class MotorOvercurrents(object):
     def __init__(self,data):
@@ -181,12 +208,19 @@ class TwoBytes:
         return intX
 
 class SensorData(object):
+
     def __init__(self,data):
         self.__data = data
 
+		
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def __proximity(self):
+        return Proximity(self.__data[32:44])
+    proximity = property(__proximity)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
     def __bumps(self):
         return Bumps(self.__data[0])
-
     bumps = property(__bumps)
 
     def __wheel_drops(self):
@@ -415,18 +449,21 @@ class RoombaAPI(object):
         
     def dock(self):
         self.sendcmd(143)
-        
+		
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        
     def __sensors(self):
         self.port.flushInput()
         self.send_to_roomba([
-            142,
-            0
+            149,
+            2,
+			0,
+			101
         ])
         self.port.flush()
-        s = self.port.read(26)
-        if len(s) < 26:
+        s = self.port.read(54)
+        if len(s) < 54:
             return None
-        if len(s) > 26:
+        if len(s) > 54:
             return self.sensors
         data = []
         output = str(s)
@@ -438,7 +475,7 @@ class RoombaAPI(object):
         return SensorData(data)
 
     sensors = property(__sensors)
-
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 if __name__ == "__main__":
     # example

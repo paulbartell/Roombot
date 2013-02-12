@@ -67,12 +67,33 @@ def processState(state,oldstate):
 		pass
 	print "got to the end"
 	return
+	
+	
 # Main loop
 
 def hapticFeedback(self)
 	s = roomba.sensors
 	bumpl = s.bumps.left
 	bumpr = s.bumps.right
+	proxl = s.proximity.left
+	proxfl = s.proxitmity.front_left
+	proxcl = s.proximity.center_left
+	proxr = s.proximity.right
+	proxfr = s.proxitmity.front_right
+	proxcr = s.proximity.center_right
+	
+	#box up sensor data [l, cl, cr, r, lb, rb]
+	#prox data is between 0 and 4096
+	#bumper data is digital
+	
+	proxl = (int) (((proxl + proxcl)/2)/7)   #average left-most sensors
+	proxcl = (int) (proxcl / 7)
+	proxr = (int) (((proxr + proxfr)/2)/7)
+	proxcr = (int) (proxcr / 7)
+	
+	#send data to arduino
+	
+	
 	
 	
 
