@@ -5,10 +5,10 @@ from stormLauncher import launchControl
 from EmgInterface import EmgInterface
 import time
 #from TestUI import TestUI
-from RemoteUI import RemoteUI
+from RemoteUI_BT import RemoteUI_BT
 from copy import deepcopy
 
-ROOMBA_PORT="/dev/tty.usbserial-A2001n69"
+ROOMBA_PORT="/dev/ttyAMA0"
 ROOMBA_BAUD="115200"
 
 #HAPTICS_PORT="/dev/rfcomm0"
