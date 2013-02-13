@@ -109,28 +109,22 @@ class DirtDetector(object):
     right = property(__right)
 	
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-class Promximity(object):
-	def __init__(self,dataList):
-		self.dataList = dataList
-		
-	def __left(self):
-		return TwoBytes(self.__dataList[0:2]).to_int16()
-	left = property(__left)
-	def __frontLeft(self):
-		return TwoBytes(self.__dataList[2:4]).to_int16()
-	front_left = property(__front_left)
-	def __center_left(self):
-		return TwoBytes(self.__dataList[4:6]).to_int16()
-	center_left = property(__center_left)
-	def __center_right(self):
-		return TwoBytes(self.__dataList[6:8]).to_int16()
-	center_right = property(__center_right)
-	def __front_right(self):
-		return TwoBytes(self.__dataList[8:10]).to_int16()
-	front_right = property(__front_right)
-	def __right(self):
-		return TwoBytes(self.__dataList[10:12]).to_int16()
-	right = property(__right)	
+class Proximity(object):
+    def __init__(self,dataList):
+        self.dataList = dataList
+    def __left(self):
+        return TwoBytes(self.__dataList[0:2]).to_int16()
+    left = property(__left)
+    def __front_left(self):
+        return bool(self.dataList[1] == 1)
+    front_left = property(__front_left)
+    def __front_right(self):
+        return bool(self.dataList[2] == 1)
+    front_right = property(__front_right)
+    def __right(self):
+        return bool(self.dataList[3] == 1)
+    right = property(__right)
+
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

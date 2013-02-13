@@ -7,18 +7,24 @@ import time
 #from TestUI import TestUI
 from RemoteUI_BT import RemoteUI_BT
 from copy import deepcopy
+from serial import Serial
 
-ROOMBA_PORT="/dev/ttyAMA0"
+#ROOMBA_PORT="/dev/ttyAMA0"
+ROOMBA_PORT = "/dev/tty.usbserial-A2001n69"
 ROOMBA_BAUD="115200"
 
-#HAPTICS_PORT="/dev/rfcomm0"
-#HAPTICS_BAUD="115200"
+HAPTICS_PORT="/dev/tty.RN42-755F-SPP"
+HAPTICS_BAUD="115200"
+
+
 
 #EMG_PORT="/dev/rfcomm1"
 #EMG_BAUD="115200"
 
 launcher = launchControl()
 roomba = RoombaAPI(ROOMBA_PORT, ROOMBA_BAUD)
+
+haptics = Serial(HAPTICS_PORT, HAPTICS_BAUD)
 
 #emg = EmgInterface(EMG_PORT, EMG_BAUD);
 #emg = EmgInterface("/dev/tty.M13762-BluetoothSerialP",115200)
@@ -71,28 +77,31 @@ def processState(state,oldstate):
 	
 # Main loop
 
-def hapticFeedback(self)
+def hapticFeedback():
 	s = roomba.sensors
 	bumpl = s.bumps.left
 	bumpr = s.bumps.right
-	proxl = s.proximity.left
-	proxfl = s.proxitmity.front_left
-	proxcl = s.proximity.center_left
-	proxr = s.proximity.right
-	proxfr = s.proxitmity.front_right
-	proxcr = s.proximity.center_right
+	dl = s.proximity.dataList
+	proxl = dl[0] << 8 + dl[1]
+	proxfl = dl[2] << 8 + dl[3]
+	proxcl = dl[4] << 8 + dl[5]
+	proxr = dl[10] << 8 + dl[11]
+	proxfr = dl[8] << 8 + dl[9]
+	proxcr = dl[6] << 8 + dl[7]
 	
 	#box up sensor data [l, cl, cr, r, lb, rb]
 	#prox data is between 0 and 4096
 	#bumper data is digital
 	
-	proxl = (int) (((proxl + proxcl)/2)/7)   #average left-most sensors
-	proxcl = (int) (proxcl / 7)
-	proxr = (int) (((proxr + proxfr)/2)/7)
-	proxcr = (int) (proxcr / 7)
+	MAXVAL = 4096
 	
-	#send data to arduino
+	proxl = (int) (((proxl + proxcl)/2)/(7*MAXVAL))#average left-most sensors
+	proxcl = (int) (proxcl / (7*MAXVAL))
+	proxr = (int) (((proxr + proxfr)/2)/(7*MAXVAL))
+	proxcr = (int) (proxcr / (7*MAXVAL))
 	
+	haptics.writelines(str([proxl, proxcl, proxr, proxcr, bumpl, bumpr]).strip('[]'))
+	print([proxl, proxcl, proxr, proxcr, bumpl, bumpr])
 	
 	
 	

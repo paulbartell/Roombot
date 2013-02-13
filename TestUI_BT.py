@@ -18,7 +18,7 @@ class TestUI():
 		self.keyList = [K_UP, K_LEFT, K_RIGHT, K_PERIOD, K_SLASH, K_RETURN, K_RSHIFT, K_SPACE]
 		
 		uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
-		service_matches = find_service( uuid = uuid, address = addr )
+		service_matches = find_service( uuid = uuid, address = "00:15:83:07:D2:54" )
 		
 		if len(service_matches) == 0:
 			print "couldn't find the SampleServer service =("
