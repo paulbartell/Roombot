@@ -1,19 +1,18 @@
-import bluetooth
+import serial
 
 class EmgInterface():
-	def __init__(self,deviceID):
-		self.deviceId = address
-		self.port = 1
-		self.sock = None
+	def __init__(self,port,baud):
+		self.ser = serial(port,baud)
 
 	def start(self):
-		while self.sock == None:
-			nearby_devices = bluetooth.discover_devices(lookup_names = True)
-			for addr, name in nearby_devices:
-  		  		if addr == deviceId:
-   		 			self.sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
-   		 			sock.connect((self.deviceId, self.port))
-   		 # send start command... how do we do this correctly.. ask them
+	
+		# while self.sock == None:
+# 			nearby_devices = bluetooth.discover_devices(lookup_names = True)
+# 			for addr, name in nearby_devices:
+#   		  		if addr == deviceId:
+#    		 			self.sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+#    		 			sock.connect((self.deviceId, self.port))
+#    		 # send start command... how do we do this correctly.. ask them
 
 	def stop(self):
 		state = 0
