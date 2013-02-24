@@ -23,18 +23,21 @@ sock.connect((deviceId, port))
 
 
 #Send N command
-sock.send(chr(int('11101110',2)))
-sock.recv(18)
+sock.send(chr(int(0x80 + ord('M'))))
+sock.send(chr(int(0x30)))
+sock.send(chr(int(0x80 + ord('M')+ 0x30)))
+#sock.recv(1)
 
 # Sending B command would be ideal
-sock.send(chr(int('01000010',2)))
-sock.recv(24)
+sock.send(chr(int(0x80 + ord('B'))))
+#sock.recv(24)
 # receive 24 bytes.. loop every 10mS or so... or wait till start
-
+for i in range(0,10000):
+	print(ord(sock.recv(1)))
 packets = []
 
-While True:
-	packets.append(sock.recv(1)) #append bytes received to our buffer
-	if len(packets) == 18:
-		#proces packets here
+#While True:
+#	packets.append(sock.recv(1)) #append bytes received to our buffer
+#	if len(packets) == 18:
+#		#proces packets here
 

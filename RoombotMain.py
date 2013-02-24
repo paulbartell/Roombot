@@ -20,9 +20,6 @@ HAPTICS_BAUD="9600"
 
 
 
-#EMG_PORT="/dev/rfcomm1"
-#EMG_BAUD="115200"
-
 launcher = launchControl()
 roomba = RoombaAPI(ROOMBA_PORT, ROOMBA_BAUD)
 
@@ -30,8 +27,9 @@ haptics = hapticFeedback(roomba,HAPTICS_PORT,HAPTICS_BAUD)
 
 #emg = EmgInterface(EMG_PORT, EMG_BAUD);
 #emg = EmgInterface("/dev/tty.M13762-BluetoothSerialP",115200)
+emg = EmgInterface('00:07:80:4B:F4:2B',5)
 
-ui = RemoteUI()
+#ui = RemoteUI()
 
 #State variable [forward,left,right,vacuum on,vacuum off,m-up,m-down,m-fire]
 
@@ -39,6 +37,7 @@ ui = RemoteUI()
 roomba.connect()
 roomba.safe() #set safe control mode ///Use other mode
 #roomba.full()
+emg.start()
 
 def processState(state,oldstate):
 	if state[0:3] == [0,0,0]: #roomba stop condition
@@ -49,14 +48,18 @@ def processState(state,oldstate):
 		print "forward"
 	if state[1] == 1 and oldstate[1] == 0: #Go left
 		roomba.left()
+		print "left"
 	if state[2] == 1 and oldstate[2] == 0: #Go Right
 		roomba.right()
+		print "right"
 	if state[3] == 1 and oldstate[3] == 0: #Vacuum on
 		roomba.motors(0b00000111)
+		print "vac on"
 	if state[3] == 0 and oldstate[3] == 1: #Vacuum on -stop
 		pass
 	if state[4] == 1 and oldstate[4] == 0: #Vacuum off
 		roomba.motors(0b00000000)
+		print "vac off"
 	if state[4] == 0 and oldstate[4] == 1: #vacuum off - stop
 		pass
 	if state[5] == 1 and oldstate[5] == 0: # turret up
@@ -73,7 +76,7 @@ def processState(state,oldstate):
 		launcher.turretFire()
 	if state[7] == 0 and oldstate[7] == 1: #turret fire stop
 		pass
-	print "got to the end"
+	#print "got to the end"
 	return
 	
 	
@@ -85,17 +88,22 @@ state = [0,0,0,0,0,0,0,0]
 
 loopcount = 0
 while True:
+	#print(emg.readPacket())
+	
 	#ui.refreshState()
-	#state = ui.state
+	state = emg.getState()
+	#print state
 	if not (state == oldstate):
 		processState(state,oldstate)
-		print "state transition performed"
-	oldstate = deepcopy(ui.state)
+		#print "state transition performed"
+	oldstate = deepcopy(state)
 	haptics.sense(roomba)
-	if loopcount%10 == 0:
-		haptics.hapticFeedback()
-		loopcount = 0
-	loopcount = loopcount + 1
-	time.sleep(0.0005) #loop rate 100Hz
+ 	if loopcount%25 == 0:
+ 		haptics.hapticFeedback()
+ 		loopcount = 0
+ 		#print(emg.sprite[emg.i])
+ 		#print(emg.threshed)
+ 	loopcount = loopcount + 1
+	#time.sleep(0.0001) #loop rate 100Hz
 	
 
